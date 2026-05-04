@@ -5,7 +5,6 @@ import pyperclip
 import json
 
 
-# TODO: Add a "Search" button next to the website entry field
 # TODO: Adjust the layout and the other widgets as needed to get the desired look
 # TODO: 3. Create a function called find_password() that gets triggered when the "Search" Button is pressed
 # TODO: 4. Check if the user's text entry matches an item in the data.json
@@ -23,7 +22,6 @@ def generate_password():
                'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
-
     password_letters = [choice(letters) for _ in range(randint(8, 10))]
     password_symbols = [choice(symbols) for _ in range(randint(2, 4))]
     password_numbers = [choice(numbers) for _ in range(randint(2, 4))]
@@ -72,35 +70,46 @@ def save():
 
 window = Tk()
 window.title("Password Manager")
-window.config(padx=50, pady=50)
+window.config(padx=50, pady=50, bg="white")
 
-canvas = Canvas(height=200, width=200)
+canvas = Canvas(height=200, width=200, bg="white", highlightthickness=0)
 logo_img = PhotoImage(file="logo.png")
 canvas.create_image(100, 100, image=logo_img)
 canvas.grid(row=0, column=1)
 
 # Labels
 website_label = Label(text="Website:")
+website_label.config(bg="white", fg="black")
 website_label.grid(row=1, column=0)
 email_label = Label(text="Email/Username:")
+email_label.config(bg="white", fg="black")
 email_label.grid(row=2, column=0)
 password_label = Label(text="Password:")
+password_label.config(bg="white", fg="black")
 password_label.grid(row=3, column=0)
 
 # Entries
 website_entry = Entry(width=35)
-website_entry.grid(row=1, column=1, columnspan=2)
+website_entry.config(bg="white", fg="black", highlightthickness=0)
+website_entry.grid(row=1, column=1, columnspan=2, sticky="EW")
 website_entry.focus()
 email_entry = Entry(width=35)
-email_entry.grid(row=2, column=1, columnspan=2)
+email_entry.config(bg="white", fg="black", highlightthickness=0)
+email_entry.grid(row=2, column=1, columnspan=2, sticky="EW")
 email_entry.insert(0, "angela@gmail.com")
 password_entry = Entry(width=21)
-password_entry.grid(row=3, column=1)
+password_entry.config(bg="white", fg="black", highlightthickness=0)
+password_entry.grid(row=3, column=1, sticky="EW")
 
 # Buttons
 generate_password_button = Button(text="Generate Password", command=generate_password)
-generate_password_button.grid(row=3, column=2)
+generate_password_button.config(highlightbackground="white", fg="black", highlightthickness=0)
+generate_password_button.grid(row=3, column=2, columnspan=2, sticky="EW")
 add_button = Button(text="Add", width=36, command=save)
-add_button.grid(row=4, column=1, columnspan=2)
+add_button.config(highlightbackground="white", fg="black", highlightthickness=0)
+add_button.grid(row=4, column=1, columnspan=2, sticky="EW")
+search_button = Button(text="Search")
+search_button.config(highlightbackground="white", fg="black", highlightthickness=0)
+search_button.grid(row=1, column=2, sticky="EW")
 
 window.mainloop()
