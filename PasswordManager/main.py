@@ -1,16 +1,14 @@
 from tkinter import *
 from tkinter import messagebox
-from random import choice, randint, shuffle
 import pyperclip
 import json
+from random import choice, randint, shuffle
 
 
-# TODO: Adjust the layout and the other widgets as needed to get the desired look
-# TODO: 3. Create a function called find_password() that gets triggered when the "Search" Button is pressed
-# TODO: 4. Check if the user's text entry matches an item in the data.json
-# TODO: 5. If yes, show a `messagebox` with the website's name and password
-# TODO: 6. Catch an exception that might occur trying to access the data.json showing a `messagebox` with the text "No Data File Found"
-# TODO: 7. If the user's website done not exist inside the data.json, show a `messagebox` that reads "No details for the website exists"
+# TODO: 6. Catch an exception that might occur trying to access the data.json showing a `messagebox` with the text
+#  "No Data File Found"
+# TODO: 7. If the user's website done not exist inside the data.json, show a `messagebox` that reads
+#  "No details for the website exists"
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -36,7 +34,7 @@ def generate_password():
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
-    website = website_entry.get()
+    website = website_entry.get().lower()
     email = email_entry.get()
     password = password_entry.get()
     new_data = {
@@ -54,7 +52,7 @@ def save():
                 data = json.load(data_file)
         except FileNotFoundError:
             with open("data.json", "w") as data_file:
-                json.dump(data, data_file, indent=4)
+                json.dump(new_data, data_file, indent=4)
         else:
             # Updating data with new data
             data.update(new_data)
@@ -64,6 +62,23 @@ def save():
         finally:
             website_entry.delete(0, END)
             password_entry.delete(0, END)
+
+
+def find_password():
+    website = website_entry.get().lower()
+    try:
+        with open("data.json", "r") as data_file:
+            # Reading old data
+            data = json.load(data_file)
+            if website in data:
+                site_name = data[website]
+                password = data[website]["password"]
+                messagebox.showinfo(message=f'Website: {website.capitalize()}\n Password: {password}\n')
+            else:
+                messagebox.showinfo(message="No details for the website exists")
+                print("Website not found")
+    except FileNotFoundError:
+        messagebox.showinfo(message="No data file found")
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -90,11 +105,11 @@ password_label.grid(row=3, column=0)
 
 # Entries
 website_entry = Entry(width=35)
-website_entry.config(bg="white", fg="black", highlightthickness=0)
+website_entry.config(bg="white", fg="black", highlightthickness=0, insertbackground="black")
 website_entry.grid(row=1, column=1, columnspan=2, sticky="EW")
 website_entry.focus()
 email_entry = Entry(width=35)
-email_entry.config(bg="white", fg="black", highlightthickness=0)
+email_entry.config(bg="white", fg="black", highlightthickness=0, insertbackground="black")
 email_entry.grid(row=2, column=1, columnspan=2, sticky="EW")
 email_entry.insert(0, "angela@gmail.com")
 password_entry = Entry(width=21)
@@ -108,7 +123,7 @@ generate_password_button.grid(row=3, column=2, columnspan=2, sticky="EW")
 add_button = Button(text="Add", width=36, command=save)
 add_button.config(highlightbackground="white", fg="black", highlightthickness=0)
 add_button.grid(row=4, column=1, columnspan=2, sticky="EW")
-search_button = Button(text="Search")
+search_button = Button(text="Search", command=find_password)
 search_button.config(highlightbackground="white", fg="black", highlightthickness=0)
 search_button.grid(row=1, column=2, sticky="EW")
 
